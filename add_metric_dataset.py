@@ -24,7 +24,7 @@ import os
 def first_xcorr_coefficient(x):
     n = np.size(x)
     mu = np.mean(x)
-    return(np.sum(x[0:n-1]*x[1:n]/n) - mu**2)
+    return(np.sum(x[0:n-1]*x[1:n]/(n-1)) - mu**2)
 
 # The bits are recorded as a string, so we need a function to convert them into
 # a numpy array. The following function converts the bits to a numpy array of
