@@ -41,34 +41,32 @@ def bits_string_to_array(s):
 
 # Set the directory where the raw panda datasets are located and the path to
 # the new location for the files
-path_to_pandas_files = './pandas/'
+path_to_pandas_files = './pandasnew/'
 
 # Set the same as in path_to_pandas_files if you want to overwrite the files or
 # simply add a new name and a new directory will be created.
-path_to_new_pandas_files = './pandas/'
+path_to_new_pandas_files = './pandasnew/'
 if not os.path.exists(path_to_new_pandas_files):
     os.makedirs(path_to_new_pandas_files)
 
-# Here, we will iterate over all data sets
-TOTAL_FILES_TO_PROCESS = 10
-for k in np.arange(1,TOTAL_FILES_TO_PROCESS+1,1):
-    print(str(k)+'-th iteration of '+str(TOTAL_FILES_TO_PROCESS))
-    # Read the k-th dataset
-    df = pd.read_csv(path_to_pandas_files+'data_pandas_'+str(k)+'.dat', sep='\t')
 
-    # Compute the number of rows of the dataset
-    dataset_size = len(df.index)
+df = pd.read_csv(path_to_pandas_files+'data_pandas.dat', sep='\t')
 
-    # We define the new array that will store the new metric (in this case the
-    # correlation at distance 1)
-    xcorr = np.zeros(dataset_size)
+# Compute the number of rows of the dataset
+dataset_size = len(df.index)
 
-    # For every row, we will obtain the raw bits, and compute the correlation
-    for i in range(dataset_size):
-        aux = df.iloc[[i]].Bits.values[0]
-        aux = bits_string_to_array(aux)
-        xcorr[i] = first_xcorr_coefficient(aux)
+# We define the new array that will store the new metric (in this case the
+# correlation at distance 1)
+xcorr = np.zeros(dataset_size)
 
-    # Now, create the new column and set the name: df['new_metric_name']
-    df['xcorr1'] = pd.Series(xcorr, index=df.index)
-    df.to_csv(path_to_new_pandas_files+'data_pandas_'+str(k)+'.dat', sep='\t')
+# For every row, we will obtain the raw bits, and compute the correlation
+for i in range(dataset_size):
+    if np.mod(i, 10000) == 0:
+        print( "Iteration "+str(i)+'/'+str(dataset_size) )
+    aux = df.iloc[[i]].Bits.values[0]
+    aux = bits_string_to_array(aux)
+    xcorr[i] = first_xcorr_coefficient(aux)
+
+# Now, create the new column and set the name: df['new_metric_name']
+df['xcorr1'] = pd.Series(xcorr, index=df.index)
+df.to_csv(path_to_new_pandas_files+'data_pandas.dat', sep='\t')

@@ -11,16 +11,8 @@ import numpy as np
 import pylab as plt
 
 # Set the directory where the raw panda datasets are located
-path_to_pandas_files = './pandas/'
-frames = []
-TOTAL_FILES_TO_PROCESS = 10
-
-for k in np.arange(1,TOTAL_FILES_TO_PROCESS+1,1):
-    df = pd.read_csv(path_to_pandas_files+'data_pandas_'+str(k)+'.dat', sep='\t')
-    frames.append(df)
-
-# Now, we concatenate all the individual files
-dataset = pd.concat(frames)
+path_to_pandas_files = './pandas_dataset/'
+dataset = pd.read_csv(path_to_pandas_files+'data_pandas.dat', sep='\t')
 print(dataset)
 # ---- dataset contains all the information.
 
